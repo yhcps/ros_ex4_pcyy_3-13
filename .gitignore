@@ -1,0 +1,21 @@
+# Catkin/cmake build outputs
+build/
+devel/
+install/
+**/CMakeFiles/
+**/cmake_install.cmake
+**/Makefile
+
+# Logs and runtime artifacts
+logs/
+**/*.log
+roscore.log
+**/roscore.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Swap/backup
+*.swp
+*~
