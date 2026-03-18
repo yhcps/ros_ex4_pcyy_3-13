@@ -1,30 +1,27 @@
 #!/bin/bash
 set -euo pipefail
 
-# One-key: open new terminal for bringup (启用超声+TOF+触碰)，current terminal runs obstacle_avoid
+# One-key: 在当前调用中先启动 bringup（启用超声+TOF+触碰），再运行 obstacle_avoid
 
 WS_ROOT="$(cd "$(dirname "$0")" && pwd)"
-# 固定启用超声与 TOF，减少外部参数依赖
-BRINGUP_CMD="cd $WS_ROOT/.. && roslaunch upros_bringup bringup_w2a.launch enable_ultra:=true enable_tof:=true"
-AVOID_CMD="cd $WS_ROOT && ./run_avoid.sh"
 
-launch_new_terminal() {
-  local title="$1"; shift
-  local cmd="$*"
-  if command -v gnome-terminal >/dev/null 2>&1; then
-    gnome-terminal --title="$title" -- bash -c "$cmd; echo; echo '[exit] close this window if not needed'; exec bash" &
-  elif command -v xterm >/dev/null 2>&1; then
-    xterm -T "$title" -e bash -lc "$cmd; echo; echo '[exit] close this window if not needed'; read -p 'Enter to close'" &
-  else
-    echo "[run_all_avoid] ERROR: no gnome-terminal or xterm found. Please run bringup manually: $cmd" >&2
-    exit 1
+BRINGUP_CMD=(roslaunch upros_bringup bringup_w2a.launch enable_ultra:=true enable_tof:=true)
+AVOID_CMD=(bash -lc "cd '$WS_ROOT' && ./run_avoid.sh")
+
+BRINGUP_PID=""
+
+cleanup() {
+  if [[ -n "$BRINGUP_PID" ]] && kill -0 "$BRINGUP_PID" 2>/dev/null; then
+    echo "[run_all_avoid] Stopping bringup (PID=$BRINGUP_PID)..."
+    kill "$BRINGUP_PID" 2>/dev/null || true
   fi
 }
+trap cleanup EXIT
 
-echo "[run_all_avoid] Launching bringup in new terminal..."
-launch_new_terminal "Terminal A - bringup" "$BRINGUP_CMD"
-
+echo "[run_all_avoid] Starting bringup (ultra+tof on)..."
+(cd "$WS_ROOT/.." && "${BRINGUP_CMD[@]}") &
+BRINGUP_PID=$!
 sleep 3
 
-echo "[run_all_avoid] Running obstacle_avoid in this terminal..."
-exec bash -lc "$AVOID_CMD"
+echo "[run_all_avoid] Running obstacle_avoid..."
+exec "${AVOID_CMD[@]}"
