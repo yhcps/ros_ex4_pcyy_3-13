@@ -14,6 +14,10 @@
 - `forward_speed` 直行线速度，米/秒（默认 0.2）
 - `turn_speed` 转向角速度，弧度/秒（默认 0.6）
 - `front_angle_deg` 前方扇区角度，度（默认 60）
+- `allow_no_scan` 无激光数据时是否仍发布指令（默认 true，便于触碰调试）
+- `no_scan_timeout` 超过该秒数未收到激光则走 fallback（默认 1.0）
+- `no_scan_linear` 无激光时 fallback 线速度（默认 0.1）
+- `no_scan_angular` 无激光时 fallback 角速度（默认 0.0）
 
 ## 构建
 在 `avoid` 工作区下：
