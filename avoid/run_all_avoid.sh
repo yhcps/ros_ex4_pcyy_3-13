@@ -1,12 +1,11 @@
 #!/bin/bash
 set -euo pipefail
 
-# One-key: open new terminal for bringup, current terminal runs obstacle_avoid
+# One-key: open new terminal for bringup (启用超声+TOF+触碰)，current terminal runs obstacle_avoid
 
 WS_ROOT="$(cd "$(dirname "$0")" && pwd)"
-# 默认纯触碰调试：关闭超声/TOF，可通过环境变量 BRINGUP_ARGS 覆盖
-BRINGUP_ARGS=${BRINGUP_ARGS:-"enable_ultra:=false enable_tof:=false"}
-BRINGUP_CMD="cd $WS_ROOT/.. && roslaunch upros_bringup bringup_w2a.launch $BRINGUP_ARGS"
+# 固定启用超声与 TOF，减少外部参数依赖
+BRINGUP_CMD="cd $WS_ROOT/.. && roslaunch upros_bringup bringup_w2a.launch enable_ultra:=true enable_tof:=true"
 AVOID_CMD="cd $WS_ROOT && ./run_avoid.sh"
 
 launch_new_terminal() {

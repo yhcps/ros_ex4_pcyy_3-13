@@ -1,14 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-# One-key runner: launch bringup in a new terminal (Terminal A) and imu_turn180 in current terminal (Terminal B).
+# One-key runner: launch bringup in a new terminal (Terminal A, 启用超声+TOF+触碰) and imu_turn180 in current terminal (Terminal B).
 # Requirements: gnome-terminal (preferred) or xterm available in PATH.
 # Usage: ./run_all.sh
 
 WS_ROOT="$(cd "$(dirname "$0")" && pwd)"
-# 默认纯触碰调试：关闭超声/TOF，可通过环境变量或参数修改
-BRINGUP_ARGS=${BRINGUP_ARGS:-"enable_ultra:=false enable_tof:=false"}
-BRINGUP_CMD="cd $WS_ROOT/.. && roslaunch upros_bringup bringup_w2a.launch $BRINGUP_ARGS"
+
+# 固定启用超声与 TOF，减少外部参数依赖
+BRINGUP_CMD="cd $WS_ROOT/.. && roslaunch upros_bringup bringup_w2a.launch enable_ultra:=true enable_tof:=true"
 TURN_CMD="cd $WS_ROOT && ./start.sh"
 
 launch_new_terminal() {

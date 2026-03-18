@@ -6,6 +6,11 @@
   <arg name="forward_speed" default="0.2" />
   <arg name="turn_speed" default="0.6" />
   <arg name="front_angle_deg" default="60.0" />
+  <arg name="bump_topic" default="/robot/bump_sensor" />
+  <arg name="enable_bump" default="true" />
+  <arg name="bump_timeout" default="0.6" />
+  <arg name="bump_back_speed" default="-0.08" />
+  <arg name="bump_turn_speed" default="0.5" />
 
   <node pkg="obstacle_avoid" type="obstacle_avoid_node" name="obstacle_avoid_node" output="screen">
     <remap from="/scan" to="$(arg scan_topic)" />
@@ -14,5 +19,10 @@
     <param name="forward_speed" value="$(arg forward_speed)" />
     <param name="turn_speed" value="$(arg turn_speed)" />
     <param name="front_angle_deg" value="$(arg front_angle_deg)" />
+    <param name="bump_topic" value="$(arg bump_topic)" />
+    <param name="enable_bump" value="$(arg enable_bump)" />
+    <param name="bump_timeout" value="$(arg bump_timeout)" />
+    <param name="bump_back_speed" value="$(arg bump_back_speed)" />
+    <param name="bump_turn_speed" value="$(arg bump_turn_speed)" />
   </node>
 </launch>
