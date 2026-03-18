@@ -6,7 +6,9 @@ set -euo pipefail
 # Usage: ./run_all.sh
 
 WS_ROOT="$(cd "$(dirname "$0")" && pwd)"
-BRINGUP_CMD="cd $WS_ROOT/.. && roslaunch upros_bringup bringup_w2a.launch"
+# 默认纯触碰调试：关闭超声/TOF，可通过环境变量或参数修改
+BRINGUP_ARGS=${BRINGUP_ARGS:-"enable_ultra:=false enable_tof:=false"}
+BRINGUP_CMD="cd $WS_ROOT/.. && roslaunch upros_bringup bringup_w2a.launch $BRINGUP_ARGS"
 TURN_CMD="cd $WS_ROOT && ./start.sh"
 
 launch_new_terminal() {
