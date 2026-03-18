@@ -2,6 +2,10 @@
 build/
 devel/
 install/
+# nested workspaces
+**/build/
+**/devel/
+**/install/
 **/CMakeFiles/
 **/cmake_install.cmake
 **/Makefile

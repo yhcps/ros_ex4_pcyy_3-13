@@ -1,0 +1,18 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="scan_topic" default="/scan" />
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="safe_dist" default="0.6" />
+  <arg name="forward_speed" default="0.2" />
+  <arg name="turn_speed" default="0.6" />
+  <arg name="front_angle_deg" default="60.0" />
+
+  <node pkg="obstacle_avoid" type="obstacle_avoid_node" name="obstacle_avoid_node" output="screen">
+    <remap from="/scan" to="$(arg scan_topic)" />
+    <remap from="/cmd_vel" to="$(arg cmd_vel_topic)" />
+    <param name="safe_dist" value="$(arg safe_dist)" />
+    <param name="forward_speed" value="$(arg forward_speed)" />
+    <param name="turn_speed" value="$(arg turn_speed)" />
+    <param name="front_angle_deg" value="$(arg front_angle_deg)" />
+  </node>
+</launch>
